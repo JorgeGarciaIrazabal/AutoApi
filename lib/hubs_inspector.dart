@@ -34,7 +34,7 @@ class HubsInspector {
 			.toList();
 	}
 
-	_getParameterDescriptions(methodMirror) {
+	Map _getParameterDescriptions(methodMirror) {
 		List <ParameterMirror> parameters = methodMirror.parameters;
 		List positionalParameters = [];
 		List namedParameters = [];

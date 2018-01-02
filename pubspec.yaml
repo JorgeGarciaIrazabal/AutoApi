@@ -1,5 +1,5 @@
 name: auto_api
-version: 0.0.1-alpha.1
+version: 0.0.1-alpha.2
 description: Library to automatically create a client interface to call server's methods asynchronously
 author: Jorge Garcia Irazabal <jorge.girazabal@gmail.com>
 

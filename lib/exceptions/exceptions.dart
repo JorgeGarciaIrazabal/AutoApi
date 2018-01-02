@@ -13,3 +13,9 @@ class DuplicatedHubNameException extends AutoApiException {
 		this.message = 'Duplicated Hub with name: "$hubName". Hub\'s names have to be unique';
 	}
 }
+
+class SerializeError extends AutoApiException {
+	SerializeError(message) {
+		this.message = message;
+	}
+}

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:mirrors';
 
+import 'exceptions/exceptions.dart';
+
 class Serializer {
 	String serialize(obj) {
 		return JSON.encode(_jsonize(obj
@@ -8,7 +10,7 @@ class Serializer {
 		);
 	}
 
-	_jsonize(var obj) {
+	Object _jsonize(obj) {
 		if (obj is String || obj is num || obj is bool) {
 			return obj;
 		} else if (obj is DateTime) {
@@ -47,14 +49,14 @@ class Serializer {
 		}
 	}
 
-	Map unserialize(objStr) {
+	Map unserialize(String objStr) {
 		Map objMap = JSON.decode(objStr
 		);
 		return _unjsonize(objMap
 		);
 	}
 
-	_unjsonize(obj) {
+	Object _unjsonize(obj) {
 		if (obj is String || obj is num || obj is bool) {
 			return obj;
 		} else if (obj is List) {
@@ -75,5 +77,6 @@ class Serializer {
 			});
 			return obj;
 		}
+		throw new SerializeError('Unable to unjsonize object');
 	}
 }
