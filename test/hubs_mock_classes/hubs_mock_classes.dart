@@ -27,3 +27,9 @@ class OneMethodWidNamedParameters extends Hub {
 		return '3';
 	}
 }
+
+class ExtendedClass extends OneMethod {
+	String m1({a1, b1 = 15}) {
+		return '3';
+	}
+}

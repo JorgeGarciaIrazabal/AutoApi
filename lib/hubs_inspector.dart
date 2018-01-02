@@ -1,17 +1,15 @@
 import 'dart:mirrors';
 
 import 'exceptions/exceptions.dart';
+import 'hub.dart';
 
 class HubsInspector {
 	Map _hubsConfiguration = new Map();
 
 	Map get hubsConfiguration => _hubsConfiguration;
 
-	// todo: remove parameters once we fix `getSubClasses`
-	// todo: use objects instead of dictionaries
-	void inspectHubs(List<Type> hubs) {
-		hubs.forEach((hub) {
-			ClassMirror hubClassMirror = reflectClass(hub);
+	void inspectHubs(List<ClassMirror> hubClassMirrors) {
+		hubClassMirrors.forEach((hubClassMirror) {
 			String hubName = MirrorSystem.getName(hubClassMirror.simpleName);
 			if (this._hubsConfiguration.containsKey(hubName)) {
 				throw new DuplicatedHubNameException(hubName);
@@ -22,6 +20,26 @@ class HubsInspector {
 				'methods': this._describeMethods(hubMirror),
 			};
 		});
+	}
+
+	List<ClassMirror> findHubs() {
+		ClassMirror hubMirror = reflectClass(Hub);
+
+		return currentMirrorSystem()
+			.libraries
+			.values
+			.where((lib) => lib.uri.scheme == "package" || lib.uri.scheme == "file")
+			.expand((lib) => lib.declarations.values)
+			.where((lib) {
+			return lib is ClassMirror &&
+				lib.isSubclassOf(hubMirror) &&
+				lib != hubMirror;
+		}).toList();
+	}
+
+	void inspectCode() {
+		List<ClassMirror> hubsMirrors = this.findHubs();
+		return this.inspectHubs(hubsMirrors);
 	}
 
 	List<Map> _describeMethods(InstanceMirror hubMirror) {
@@ -69,17 +87,5 @@ class HubsInspector {
 			!methodMirror.isSynthetic &&
 			!(methodMirror.simpleName == new Symbol('toString')) &&
 			!(methodMirror.simpleName == new Symbol('noSuchMethod'));
-	}
-
-	static List<Type> getSubclasses(Type type) {
-		List<Type> subClasses = [];
-		MirrorSystem mirrorSystem = currentMirrorSystem();
-
-		mirrorSystem.isolate.rootLibrary.classes.forEach((s, c) {
-			if (c.superclass == type) {
-				subClasses.add(c);
-			}
-		});
-		return subClasses;
 	}
 }
