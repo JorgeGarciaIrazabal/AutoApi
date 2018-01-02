@@ -1,8 +1,12 @@
-name: AutoApi
+name: auto_api
+version: 0.0.1-alpha.1
 description: Library to automatically create a client interface to call server's methods asynchronously
+author: Jorge Garcia Irazabal <jorge.girazabal@gmail.com>
 
-dependencies:
-  http_server: ^0.9.6
+homepage: https://github.com/JorgeGarciaIrazabal/AutoApi
 
 dev_dependencies:
   test: ^0.12.0
+
+environment:
+  sdk: ">=1.23.0 <2.0.0"

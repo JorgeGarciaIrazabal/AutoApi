@@ -1,4 +1,4 @@
-import 'package:AutoApi/hub.dart';
+import '../../lib/hub.dart';
 
 class OneMethod extends Hub {
 	String myMethod() {

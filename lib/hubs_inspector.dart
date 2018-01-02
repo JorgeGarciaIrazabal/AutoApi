@@ -1,6 +1,6 @@
 import 'dart:mirrors';
 
-import 'package:AutoApi/exceptions/exceptions.dart';
+import 'exceptions/exceptions.dart';
 
 class HubsInspector {
 	Map _hubsConfiguration = new Map();

@@ -1,7 +1,7 @@
-import 'package:AutoApi/exceptions/exceptions.dart';
-import 'package:AutoApi/hubs_inspector.dart';
 import 'package:test/test.dart';
 
+import '../lib/exceptions/exceptions.dart';
+import '../lib/hubs_inspector.dart';
 import 'hubs_mock_classes/duplicated_hubs_mock_class.dart' as duplicated;
 import 'hubs_mock_classes/hubs_mock_classes.dart';
 
