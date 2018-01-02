@@ -1,0 +1,8 @@
+name: AutoApi
+description: Library to automatically create a client interface to call server's methods asynchronously
+
+dependencies:
+  http_server: ^0.9.6
+
+dev_dependencies:
+  test: ^0.12.0
