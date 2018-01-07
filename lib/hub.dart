@@ -1,3 +1,3 @@
-class Hub {
+class Hub extends Object {
 
 }

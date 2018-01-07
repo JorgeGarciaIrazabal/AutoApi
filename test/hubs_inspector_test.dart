@@ -18,6 +18,7 @@ void main() {
       reflectClass(OneMethodWidDefaultValueParameters),
       reflectClass(OneMethodWidNamedParameters),
       reflectClass(ExtendedClass),
+      reflectClass(HubMock),
     ];
   });
 

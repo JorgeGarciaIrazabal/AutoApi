@@ -5,6 +5,7 @@ import 'hub.dart';
 import 'hub_configuration.dart';
 
 class HubsInspector {
+	bool codeInspected = false;
 	Map<String, HubDescriptor> _hubsDescriptions = new Map<String, HubDescriptor>();
 
 	Map<String, HubDescriptor> get hubDescriptions => _hubsDescriptions;
@@ -27,6 +28,12 @@ class HubsInspector {
 		}).toList();
 	}
 
+	Hub getHubInstance(Type hubType) {
+		ClassMirror hubMirror = reflectClass(hubType);
+		String hubName = MirrorSystem.getName(hubMirror.simpleName);
+		return this._hubsDescriptions[hubName].hubMirror.reflectee;
+	}
+
 	void _inspectHubs(List<ClassMirror> hubClassMirrors) {
 		hubClassMirrors.forEach((hubClassMirror) {
 			String hubName = MirrorSystem.getName(hubClassMirror.simpleName);
@@ -39,6 +46,7 @@ class HubsInspector {
 				..hubMirror = hubMirror
 				..methods = this._describeMethods(hubMirror);
 		});
+		this.codeInspected = true;
 	}
 
 	List<MethodDescriptor> _describeMethods(InstanceMirror hubMirror) {

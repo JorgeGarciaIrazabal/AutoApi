@@ -19,3 +19,15 @@ class SerializeError extends AutoApiException {
 		this.message = message;
 	}
 }
+
+class HubNotFoundException extends AutoApiException {
+	HubNotFoundException(hub) {
+		this.message = '$hub not found';
+	}
+}
+
+class MethodNotFoundException extends AutoApiException {
+	MethodNotFoundException(hub, method) {
+		this.message = 'Method $method not found in $hub';
+	}
+}
