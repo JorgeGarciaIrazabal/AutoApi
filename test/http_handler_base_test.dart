@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:test/test.dart';
 
 import '../lib/hubs_inspector.dart';
@@ -26,7 +28,8 @@ void main() {
 					'namedParameters': {},
 				}
 				..request = 'my_request';
-			Object result = await httpHandlerMock.start();
+			String stringResult = await httpHandlerMock.start();
+			Object result = JSON.decode(stringResult)['result'];
 			expect(hubMock.positionalParameters, [1, 3]);
 			expect(hubMock.namedParameters, {});
 			expect(result, 1);
@@ -41,7 +44,8 @@ void main() {
 					'namedParameters': {},
 				}
 				..request = 'my_request';
-			Object result = await httpHandlerMock.start();
+			String stringResult = await httpHandlerMock.start();
+			Object result = JSON.decode(stringResult)['result'];
 			expect(hubMock.positionalParameters, [5, 15]);
 			expect(hubMock.namedParameters, {});
 			expect(result, 5);
@@ -56,7 +60,8 @@ void main() {
 					'namedParameters': {'a1': 1, 'b1': 3},
 				}
 				..request = 'my_request';
-			Object result = await httpHandlerMock.start();
+			String stringResult = await httpHandlerMock.start();
+			Object result = JSON.decode(stringResult)['result'];
 			expect(hubMock.namedParameters, {'a1': 1, 'b1': 3});
 			expect(hubMock.positionalParameters, []);
 			expect(result, 1);
@@ -71,7 +76,8 @@ void main() {
 					'namedParameters': {'a1': 1},
 				}
 				..request = 'my_request';
-			Object result = await httpHandlerMock.start();
+			String stringResult = await httpHandlerMock.start();
+			Object result = JSON.decode(stringResult)['result'];
 			expect(hubMock.namedParameters, {'a1': 1, 'b1': 15});
 			expect(hubMock.positionalParameters, []);
 			expect(result, 1);
@@ -86,7 +92,8 @@ void main() {
 					'namedParameters': {},
 				}
 				..request = -3;
-			Object result = await httpHandlerMock.start();
+			String stringResult = await httpHandlerMock.start();
+			Object result = JSON.decode(stringResult)['result'];
 			expect(hubMock.positionalParameters, [5, -3, 15]);
 			expect(hubMock.namedParameters, {});
 			expect(result, 5);
@@ -101,7 +108,8 @@ void main() {
 					'namedParameters': {'a1': 1, 'b1': 3},
 				}
 				..request = 0;
-			Object result = await httpHandlerMock.start();
+			String stringResult = await httpHandlerMock.start();
+			Object result = JSON.decode(stringResult)['result'];
 			expect(hubMock.namedParameters, {'a1': 1, 'b1': 3, 'request_': 0});
 			expect(hubMock.positionalParameters, []);
 			expect(result, 1);
@@ -145,5 +153,9 @@ void main() {
 			expect(hubMock.namedParameters, {});
 			expect(hubMock.positionalParameters, []);
 		});
+	});
+
+	group('handleRequest', () {
+
 	});
 }

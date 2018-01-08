@@ -4,11 +4,11 @@ import 'dart:mirrors';
 import 'exceptions/exceptions.dart';
 
 class Serializer {
-  String serialize(obj) {
+  String serialize(Object obj) {
     return JSON.encode(_jsonize(obj));
   }
 
-  Object _jsonize(obj) {
+  Object _jsonize(Object obj) {
     if (obj is String || obj is num || obj is bool) {
       return obj;
     } else if (obj is DateTime) {
@@ -45,7 +45,7 @@ class Serializer {
     return _unjsonize(objMap);
   }
 
-  Object _unjsonize(obj) {
+  Object _unjsonize(Object obj) {
     if (obj is String || obj is num || obj is bool) {
       return obj;
     } else if (obj is List) {

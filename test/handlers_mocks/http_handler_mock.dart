@@ -11,5 +11,4 @@ class HttpHandlerMock extends HttpHandlerBase {
 		await new Future.delayed(const Duration(microseconds: 1));
 		return await this.handleRequest(this.body, request);
 	}
-
 }

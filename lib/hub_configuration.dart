@@ -13,7 +13,7 @@ class ParameterDescriptor {
   @override
   int get hashCode => name.hashCode ^ defaultValue.hashCode;
 
-  Map toJson() {
+  Map toMap() {
     return {
       'name': this.name,
       'defaultValue': defaultValue,
@@ -27,11 +27,11 @@ class MethodDescriptor {
   List<ParameterDescriptor> namedParameters;
   MethodMirror methodMirror;
 
-  Map toJson() {
+  Map toMap() {
     return {
       'name': name,
-      'positionalParameters': positionalParameters.map((p) => p.toJson()),
-      'namedParameters': namedParameters.map((p) => p.toJson()),
+      'positionalParameters': positionalParameters.map((p) => p.toMap()).toList(),
+      'namedParameters': namedParameters.map((p) => p.toMap()).toList(),
     };
   }
 }
@@ -41,7 +41,7 @@ class HubDescriptor {
   List<MethodDescriptor> methods;
   InstanceMirror hubMirror;
 
-  Map toJson() {
-    return {'name': name, 'methos': methods.map((m) => m.toJson())};
+  Map toMap() {
+    return {'name': name, 'methods': methods.map((m) => m.toMap()).toList()};
   }
 }

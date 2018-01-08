@@ -8,9 +8,10 @@ import '../hubs_inspector.dart';
 import '../serializer.dart';
 
 abstract class HttpHandlerBase {
-	final REQUEST_PARAMETER_NAME = 'request_';
+	final String REQUEST_PARAMETER_NAME = 'request_';
 	HubsInspector _hubInspector = new HubsInspector();
 	Serializer _serializer = new Serializer();
+	int _messageId = 0;
 
 	HubsInspector get hubInspector => _hubInspector;
 
@@ -19,7 +20,7 @@ abstract class HttpHandlerBase {
 	// todo add enum for mode Production, Develop, DevelopVerbose etc
 
 	@protected
-	Future handleRequest(Map body, Object request) async {
+	Future<String> handleRequest(Map body, Object request) async {
 		if (!this._hubInspector.hubDescriptions.containsKey(body['hub'])) {
 			throw new HubNotFoundException(body['hub']);
 		}
@@ -32,18 +33,17 @@ abstract class HttpHandlerBase {
 			namedParameters[new Symbol(k)] = v;
 		});
 
-		Object result = hubDescriptor.hubMirror
-				.invoke(
+		Object hubResult = hubDescriptor.hubMirror
+			.invoke(
 			new Symbol(body['method']),
 			body['positionalParameters'] ?? [],
 			namedParameters,
 		)
-				.reflectee;
+			.reflectee;
 
-		if (result is Future) {
-			return await result;
-		}
-		return result;
+		Object result = hubResult is Future ? await hubResult : hubResult;
+
+		return this.constructOkResponse(result);
 	}
 
 	Future start() async {
@@ -57,20 +57,10 @@ abstract class HttpHandlerBase {
 	Future serverListen();
 
 	@protected
-	String constructOkResponse({Object result, int id}) {
+	String constructOkResponse(Object result) {
 		Map response = {
 			'result': result,
-			'id': id,
-		};
-		return this._serializer.serialize(response);
-	}
-
-	@protected
-	String constructErrorResponse({Exception exception, StackTrace stackTrace, int id}) {
-		Map response = {
-			'error': exception.toString(),
-			'stackTrace': stackTrace.toString(),
-			'id': id,
+			'id': this._messageId++,
 		};
 		return this._serializer.serialize(response);
 	}
@@ -80,19 +70,19 @@ abstract class HttpHandlerBase {
 		MethodDescriptor methodDescriptor;
 		try {
 			methodDescriptor = hubDescriptor.methods
-					.firstWhere((m) => m.name == body['method']);
+				.firstWhere((m) => m.name == body['method']);
 		} on StateError catch (_) {
 			throw new MethodNotFoundException(body['hub'], body['method']);
 		}
 
 		ParameterDescriptor requestParam = methodDescriptor.positionalParameters
-				.firstWhere((p) => p.name == this.REQUEST_PARAMETER_NAME, orElse: () => null);
+			.firstWhere((p) => p.name == this.REQUEST_PARAMETER_NAME, orElse: () => null);
 		if (requestParam != null) {
 			body['positionalParameters']
-					.insert(methodDescriptor.positionalParameters.indexOf(requestParam), request);
+				.insert(methodDescriptor.positionalParameters.indexOf(requestParam), request);
 		} else {
 			requestParam = methodDescriptor.namedParameters
-					.firstWhere((p) => p.name == this.REQUEST_PARAMETER_NAME, orElse: () => null);
+				.firstWhere((p) => p.name == this.REQUEST_PARAMETER_NAME, orElse: () => null);
 			if (requestParam != null) {
 				body['namedParameters'][this.REQUEST_PARAMETER_NAME] = request;
 			}
