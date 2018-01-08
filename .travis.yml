@@ -4,8 +4,3 @@ dart:
 dart_task:
 - dartanalyzer: --fatal-warnings lib
 - test
-install:
-- gem install coveralls-lcov
-script: ./tool/travis.sh
-after_success:
-- coveralls-lcov var/lcov.info

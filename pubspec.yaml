@@ -6,8 +6,9 @@ author: Jorge Garcia Irazabal <jorge.girazabal@gmail.com>
 homepage: https://github.com/JorgeGarciaIrazabal/AutoApi
 
 dev_dependencies:
-  test: ^0.12.0
-  mockito: "^2.2.1"
+  test:
+  mockito:
+  coverage:
 
 environment:
   sdk: ">=1.23.0"
