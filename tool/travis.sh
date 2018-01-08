@@ -1,4 +1,4 @@
-# Gather coverage and upload to Coveralls.
+# Gather coverage and upload to Coveralls (Jorge).
 if [ "$COVERALLS_TOKEN" ]; then
   OBS_PORT=9292
   echo "Collecting coverage on port $OBS_PORT..."
